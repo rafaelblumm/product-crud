@@ -2,7 +2,6 @@ from product import Category, Product
 from enum import Enum
 import sqlite3
 
-# https://awari.com.br/python-sqlite3-aprenda-a-utilizar-o-banco-de-dados-sqlite3-com-python/
 
 class InvalidDatabase(Exception):
     """ Erro de opção inválida de banco de dados
