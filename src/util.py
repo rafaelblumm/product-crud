@@ -20,9 +20,16 @@ def get_username() -> str:
     :return: Nome de usuário
     """
     if "username" not in st.session_state:
-        user = getpass.getuser()
-        if len(user.strip()) == 0:
-            user = "Usuári@"
-        return user
+        return get_default_username()
     
     return st.session_state["username"]
+
+
+def get_default_username() -> str:
+    """ Busca nome de usuário do sistema operacional ou usuário padrão
+    :return: Nome de usuário
+    """
+    user = getpass.getuser()
+    if len(user.strip()) == 0:
+        user = "Usuári@"
+    return user
