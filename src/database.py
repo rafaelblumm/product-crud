@@ -76,7 +76,7 @@ class SQLite(Database):
         """ Conecta com o banco de dados
         :return: Se conectou com sucesso
         """
-        self.conn = sqlite3.connect(self.path)
+        self.conn = sqlite3.connect(self.path, check_same_thread=False)
     
 
     def disconnect(self) -> None:
