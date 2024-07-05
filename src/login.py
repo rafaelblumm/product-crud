@@ -14,11 +14,12 @@ def login_page():
     st.title("Bem-vindo ao :green[cadastro de produtos]!")
     st.subheader("Informe seu nome para prosseguir")
     name_input = st.text_input("Nome de usuário",
+                               util.get_default_username(),
                                max_chars=50,
-                               placeholder=util.get_default_username())
+                               placeholder="Seu nome de usuário")
     submit_button = st.button("Acessar", type="primary")
 
-    if (submit_button or name_input) and _is_valid_name(name_input):
+    if submit_button and _is_valid_name(name_input):
         st.session_state["username"] = name_input
     
 

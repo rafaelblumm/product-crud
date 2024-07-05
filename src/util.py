@@ -1,6 +1,10 @@
 import os
+import pathlib
+from sqlite3 import Connection
 import streamlit as st
 import getpass
+
+from database import Database
 
 def is_dev_mode() -> bool:
     """ Indica se está no modo desenvolvedor
@@ -33,3 +37,11 @@ def get_default_username() -> str:
     if len(user.strip()) == 0:
         user = "Usuári@"
     return user
+
+
+def _get_db_path() -> str:
+    """ Monta caminho da base de dados
+    :return: /.../product_crud/data/stock.db
+    """
+    root_dir = pathlib.Path(__file__).parent.parent.resolve()
+    return os.path.join(root_dir, "data", "stock.db")
