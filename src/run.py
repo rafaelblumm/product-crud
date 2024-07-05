@@ -1,5 +1,5 @@
-import login
-import app
+import ui.login as login
+import ui.app as app
 import util
 
 
