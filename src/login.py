@@ -1,6 +1,7 @@
 import streamlit as st
 import util
 
+
 def login_page():
     """ Exibe página de login.
     Se estiver em modo dev, assume nome padrão para o usuário
@@ -19,6 +20,12 @@ def login_page():
 
     if (submit_button or name_input) and _is_valid_name(name_input):
         st.session_state["username"] = name_input
+    
+
+def is_logged_in() -> bool:
+    """ Indica se usuário está logado na plataforma
+    """
+    return "username" in st.session_state
 
 
 def _configure_page():
