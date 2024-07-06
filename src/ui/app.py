@@ -3,6 +3,7 @@ import pathlib
 import streamlit as st
 import util
 import ui.product_form as product_form
+import ui.product_list as product_list
 from database import Database
 
 
@@ -26,7 +27,7 @@ def _setup_db():
     if not os.path.exists(data_dir):
         os.mkdir(data_dir)
 
-    db = Database.get(util._get_db_path())
+    db = Database.get(db_path)
     db.connect()
     db.initialize_tables()
     st.session_state["database"] = db
@@ -72,7 +73,7 @@ def _configure_main_container():
 
     db = st.session_state["database"]
     with tabs[0]:
-        _show_product_list()
+        product_list.show(db)
 
     with tabs[1]:
         _show_category_list()
@@ -84,15 +85,7 @@ def _configure_main_container():
         _show_about()
 
 
-def _show_product_list():
-    """ Exibe listagem de produtos
-    """
-    st.error("Not implemented")
-
-
 def _show_category_list():
-    """ Exibe listagem de categorias
-    """
     st.error("Not implemented")
 
 

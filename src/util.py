@@ -1,10 +1,8 @@
 import os
 import pathlib
-from sqlite3 import Connection
 import streamlit as st
 import getpass
 
-from database import Database
 
 def is_dev_mode() -> bool:
     """ Indica se está no modo desenvolvedor
@@ -45,3 +43,19 @@ def _get_db_path() -> str:
     """
     root_dir = pathlib.Path(__file__).parent.parent.resolve()
     return os.path.join(root_dir, "data", "stock.db")
+
+
+def bool_to_int(val: bool) -> int:
+    """ Converte valor booleano para inteiro
+    :param val: Booleano a ser convertido
+    :return: 1 para True e 0 para False
+    """
+    return 1 if val else 0
+
+
+def int_to_bool(val: int) -> int:
+    """ Converte valor inteiro para booleano
+    :param val: Inteiro a ser convertido
+    :return: True para 1 e False para 0
+    """
+    return val == 1

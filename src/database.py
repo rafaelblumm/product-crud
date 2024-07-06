@@ -1,5 +1,6 @@
 from product import Category, Product
 from enum import Enum
+import util
 import sqlite3
 
 
@@ -84,6 +85,19 @@ class SQLite(Database):
         """
         self.conn.close()
 
+    
+    def search_category(self, id: int) -> Category | None:
+        sql = f"""
+            SELECT *
+            FROM categories
+            WHERE category_id = {id}
+        """
+        result = self.conn.execute(sql).fetchone()
+        if result is None:
+            return None
+        
+        return Category.from_db(result)
+
 
     def insert(self, item: Product | Category) -> bool:
         """ Insere item no banco de dados
@@ -94,6 +108,8 @@ class SQLite(Database):
             result_ok = self._insert_product(item)
         if isinstance(item, Category):
             result_ok = self._insert_category(item)
+        else:
+            raise ValueError
         
         if result_ok:
             self.conn.commit()
@@ -112,7 +128,7 @@ class SQLite(Database):
                 units_on_order, reorder_level, discontinued)
             VALUES ("{p.name}", {p.supplier_id}, {p.category.id},
                 {p.quantity_per_unit}, {p.unit_price}, {p.stock},
-                {p.orders}, {p.reorder_days}, {self._bool_to_int(p.discontinued)});
+                {p.orders}, {p.reorder_days}, {util.bool_to_int(p.discontinued)});
         """
         return self.conn.execute(sql).rowcount != 0
     
@@ -138,6 +154,8 @@ class SQLite(Database):
             result_ok = self._delete_product(item)
         if isinstance(item, Category):
             result_ok = self._delete_category(item)
+        else:
+            raise ValueError
         
         if result_ok:
             self.conn.commit()
@@ -180,6 +198,8 @@ class SQLite(Database):
             result_ok =  self._update_product(item)
         if isinstance(item, Category):
             result_ok =  self._update_category(item)
+        else:
+            raise ValueError
         
         if result_ok:
             self.conn.commit()
@@ -198,7 +218,7 @@ class SQLite(Database):
                 category_id = {p.category.id}, quantity_per_unit = {p.quantity_per_unit},
                 unit_price = {p.unit_price}, units_in_stock = {p.stock},
                 units_on_order = {p.orders}, reorder_level = {p.reorder_days},
-                discontinued = {self._bool_to_int(p.discontinued)}
+                discontinued = {util.bool_to_int(p.discontinued)}
             WHERE product_id = {p.id};
         """
         return self.conn.execute(sql).rowcount != 0
@@ -223,7 +243,13 @@ class SQLite(Database):
         """
         products = []
         for row in self._list("products"):
-            products.append(Product.from_db(row))
+            products.append(
+                Product(
+                    row[1], row[2], self.search_category(row[3]),
+                    row[4], row[5], row[6], row[7], row[8],
+                    util.int_to_bool(row[9]), id = row[0]
+                )
+            )
 
         return products
     
@@ -291,11 +317,3 @@ class SQLite(Database):
             );
         """
         self.conn.execute(sql)
-
-
-    def _bool_to_int(self, val: bool) -> int:
-        """ Converte valor booleano para inteiro
-        :param val: Booleano a ser convertido
-        :return: 1 para True e 0 para False
-        """
-        return 1 if val else 0

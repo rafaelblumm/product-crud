@@ -48,17 +48,7 @@ class Product:
         self.reorder_days = reorder_days
         self.discontinued = discontinued
         self.id = id
-    
 
-    def from_db(row: str):
-        """ Construtor a partir de linha do banco de dados
-        :param row: Linha do banco de dados
-        """
-        return Product(
-            row[1], row[2], row[3], row[4], row[5], row[6],
-            row[7], row[8], row[9], id = row[0]
-        )
-    
 
     def __str__(self) -> str:
         return f"""id={self.id}
