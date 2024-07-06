@@ -29,8 +29,11 @@ def _show_create_button(db):
         if description:
             if len(description) == 0:
                 st.error("É necessário informar uma descrição")
+            elif "last_inserted_category" in st.session_state and st.session_state["last_inserted_category"] == description:
+                pass
             else:
                 if db.insert(Category(description)):
+                    st.session_state["last_inserted_category"] = description
                     del st.session_state["categories"]
                     st.success("Categoria adicionada com sucesso", icon="✅")
                 else:
