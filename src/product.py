@@ -10,8 +10,7 @@ class Category:
 
 
     def __str__(self) -> str:
-        return f"""id={self.id}
-description={self.description}"""
+        return f"- Descrição: {self.description}"
         
 
     def from_db(row: str):

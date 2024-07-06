@@ -42,7 +42,23 @@ def _show_remove_button(db):
     :param db: Instância do banco de dados 
     """
     with st.popover("Remover categoria"):
-        st.error("Not implemented")
+        id = st.number_input("ID da categoria", min_value=0)
+        if id:
+            st.session_state["category"] = db.search_category(id)
+        if "category" in st.session_state and st.session_state["category"] is None:
+            st.error("Produto não encontrado")
+        elif "category" in st.session_state:
+            category = st.session_state["category"]
+            if db.is_category_in_use(category):
+                st.error("Não é possível remover categoria em uso na tabela de produtos")
+            elif st.button("Deletar", type="primary"):
+                if db.delete(category):
+                    st.success("Categoria removida com sucesso", icon="✅")
+                    for key in ["category", "category_df"]:
+                        del st.session_state[key]
+                else:
+                    st.error("Erro ao remover categoria", icon="🚨")
+            st.write(category.__str__())
 
 
 def _build_dataframe(categories: list) -> pd.DataFrame:

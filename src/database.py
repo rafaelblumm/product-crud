@@ -300,6 +300,19 @@ class SQLite(Database):
             FROM {table};
         """
         return self.conn.execute(sql)
+    
+
+    def is_category_in_use(self, c: Category) -> bool:
+        """ Indica se categoria está em uso
+        :param c: Categoria
+        :return: Se está em uso
+        """
+        sql = f"""
+            SELECT (product_id)
+            FROM products
+            WHERE category_id = {c.id}
+        """
+        return len(self.conn.execute(sql).fetchall()) != 0
 
 
     def initialize_tables(self) -> None:
