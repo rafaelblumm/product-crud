@@ -6,6 +6,20 @@ def show(db):
     """ Exibe listagem de produtos
     :param db: Instância do banco de dados 
     """
+    _show_remove_button(db)
+    if "product_df" not in st.session_state:
+        st.session_state["product_df"] = _build_dataframe(db.list_products())
+    
+    st.dataframe(
+        st.session_state["product_df"],
+        hide_index=True
+    )
+
+
+def _show_remove_button(db) -> None:
+    """ Cria botão para remover produto
+    :param db: Instância do banco de dados 
+    """
     with st.popover("Remover produto"):
         id = st.number_input("ID do produto", min_value=0)
         if id:
@@ -23,14 +37,6 @@ def show(db):
                     st.error("Erro ao remover produto", icon="🚨")
             for line in product.__str__().split("\n"):
                 st.write(line)
-
-    if "product_df" not in st.session_state:
-        st.session_state["product_df"] = _build_dataframe(db.list_products())
-    
-    st.dataframe(
-        st.session_state["product_df"],
-        hide_index=True
-    )
 
 
 def _build_dataframe(products: list) -> pd.DataFrame:
@@ -52,4 +58,3 @@ def _build_dataframe(products: list) -> pd.DataFrame:
             "Descontinuado": [p.discontinued for p in products]
         }
     )
-    
