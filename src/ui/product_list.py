@@ -7,7 +7,8 @@ def show(db):
     :param db: Instância do banco de dados 
     """
     _show_remove_button(db)
-    if "product_df" not in st.session_state:
+    should_reload = st.button("Recarregar", key="reload_products")
+    if should_reload or "product_df" not in st.session_state:
         st.session_state["product_df"] = _build_dataframe(db.list_products())
     
     st.dataframe(
@@ -49,7 +50,7 @@ def _build_dataframe(products: list) -> pd.DataFrame:
             "ID": [p.id for p in products],
             "Nome": [p.name for p in products],
             "ID de fornecedor": [p.supplier_id for p in products],
-            "Categoria": [p.category.description for p in products],
+            "Categoria": [f"{p.category.id}-{p.category.description}" for p in products],
             "Qnt por unidade": [p.quantity_per_unit for p in products],
             "Preço unitário": [p.unit_price for p in products],
             "Em estoque": [p.stock for p in products],

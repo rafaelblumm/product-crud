@@ -94,7 +94,7 @@ def _get_category_descriptions(db):
             categories = db.list_categories()
 
         for c in categories:
-            category_map[c.description] = c
+            category_map[f"{c.id}-{c.description}"] = c
         st.session_state["categories"] = category_map
 
     category_descriptions = list(st.session_state["categories"].keys())
