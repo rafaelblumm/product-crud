@@ -4,6 +4,7 @@ import streamlit as st
 import util
 import ui.product_form as product_form
 import ui.product_list as product_list
+import ui.category_list as category_list
 from database import Database
 
 
@@ -55,13 +56,6 @@ def _configure_sidebar():
             st.session_state["database"].disconnect()
             st.stop()
 
-        st.caption("Engenharia de software: Análise (2024/01)")
-        st.divider()
-        st.caption("Felipe Braun Hinkel")
-        st.caption("Luidi Bahia Kleemann")
-        st.caption("Murilo Denech Longue")
-        st.caption("Rafael Flores Blumm")
-
 
 def _configure_main_container():
     """ Configura container principal da tela
@@ -71,8 +65,7 @@ def _configure_main_container():
     tabs = st.tabs([
         "Listagem de produtos",
         "Listagem de categorias",
-        "Inserir produto",
-        "Sobre"
+        "Inserir produto"
     ])
 
     db = st.session_state["database"]
@@ -80,20 +73,7 @@ def _configure_main_container():
         product_list.show(db)
 
     with tabs[1]:
-        _show_category_list()
+        category_list.show(db)
 
     with tabs[2]:
         product_form.show(db)
-
-    with tabs[3]:
-        _show_about()
-
-
-def _show_category_list():
-    st.error("Not implemented")
-
-
-def _show_about():
-    """ Exibe dados sobre o projeto
-    """
-    st.error("Not implemented")

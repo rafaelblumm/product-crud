@@ -122,6 +122,7 @@ def _submit(p: Product, db: Database) -> dict:
         }
         
     if db.insert(p):
+        del st.session_state["product_df"]
         return {
             STATUS_KEY: True,
             MSG_KEY: "Produto gravado com sucesso"
