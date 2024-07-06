@@ -51,13 +51,12 @@ class Product:
 
 
     def __str__(self) -> str:
-        return f"""id={self.id}
-name={self.name}
-supplier_id={self.supplier_id}
-category={self.category}
-quantity_per_unit={self.quantity_per_unit}
-unit_price={self.unit_price}
-stock={self.stock}
-orders={self.orders}
-reorder_days={self.reorder_days}
-discontinued={self.discontinued}"""
+        return f"""- Nome: {self.name}
+- Fornecedor: {self.supplier_id}
+- Categoria: {self.category.description}
+- Qnt. por unidade: {self.quantity_per_unit}
+- Preço unitário: {self.unit_price}
+- Estoque: {self.stock}
+- Vendidos: {self.orders}
+- Dias até reabastecimento: {self.reorder_days}
+- Descontinuado: {"Sim" if self.discontinued else "Não"}"""

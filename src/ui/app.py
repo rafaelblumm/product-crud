@@ -51,6 +51,10 @@ def _configure_sidebar():
         st.title("Cadastro de produtos")
         st.divider()
 
+        if st.button("Encerrar sessão"):
+            st.session_state["database"].disconnect()
+            st.stop()
+
         st.caption("Engenharia de software: Análise (2024/01)")
         st.divider()
         st.caption("Felipe Braun Hinkel")

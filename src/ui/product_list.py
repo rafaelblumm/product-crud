@@ -6,6 +6,24 @@ def show(db):
     """ Exibe listagem de produtos
     :param db: Instância do banco de dados 
     """
+    with st.popover("Remover produto"):
+        id = st.number_input("ID do produto", min_value=0)
+        if id:
+            st.session_state["product"] = db.search_product(id)
+        if "product" in st.session_state and st.session_state["product"] is None:
+            st.error("Produto não encontrado")
+        elif "product" in st.session_state:
+            product = st.session_state["product"]
+            if st.button("Deletar", type="primary"):
+                if db.delete(product):
+                    st.success("Produto removido com sucesso", icon="✅")
+                    for key in ["product", "product_df"]:
+                        del st.session_state[key]
+                else:
+                    st.error("Erro ao remover produto", icon="🚨")
+            for line in product.__str__().split("\n"):
+                st.write(line)
+
     if "product_df" not in st.session_state:
         st.session_state["product_df"] = _build_dataframe(db.list_products())
     

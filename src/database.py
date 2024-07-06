@@ -87,6 +87,10 @@ class SQLite(Database):
 
     
     def search_category(self, id: int) -> Category | None:
+        """ Busca categoria no banco de dados
+        :param id: ID da categoria
+        :return: Categoria ou None, se não encontrado
+        """
         sql = f"""
             SELECT *
             FROM categories
@@ -97,6 +101,27 @@ class SQLite(Database):
             return None
         
         return Category.from_db(result)
+    
+
+    def search_product(self, id: int) -> Product | None:
+        """ Busca produto no banco de dados
+        :param id: ID do produto
+        :return: Produto ou None, se não encontrado
+        """
+        sql = f"""
+            SELECT *
+            FROM products
+            WHERE product_id = {id}
+        """
+        result = self.conn.execute(sql).fetchone()
+        if result is None:
+            return None
+        
+        return Product(
+            result[1], result[2], self.search_category(result[3]),
+            result[4], result[5], result[6], result[7], result[8],
+            util.int_to_bool(result[9]), id = result[0]
+        )
 
 
     def insert(self, item: Product | Category) -> bool:
@@ -106,7 +131,7 @@ class SQLite(Database):
         """
         if isinstance(item, Product):
             result_ok = self._insert_product(item)
-        if isinstance(item, Category):
+        elif isinstance(item, Category):
             result_ok = self._insert_category(item)
         else:
             raise ValueError
@@ -152,7 +177,7 @@ class SQLite(Database):
         """
         if isinstance(item, Product):
             result_ok = self._delete_product(item)
-        if isinstance(item, Category):
+        elif isinstance(item, Category):
             result_ok = self._delete_category(item)
         else:
             raise ValueError
@@ -196,7 +221,7 @@ class SQLite(Database):
         """
         if isinstance(item, Product):
             result_ok =  self._update_product(item)
-        if isinstance(item, Category):
+        elif isinstance(item, Category):
             result_ok =  self._update_category(item)
         else:
             raise ValueError
